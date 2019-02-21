@@ -74,17 +74,17 @@ var cleanlitter = new ActivityLog({
     user: arturo
 });
 
-arturo.save(() => { })
-anna.save(() => { })
+// arturo.save(() => { })
+// anna.save(() => { })
 
 
-litter.save(function (err, task) {
-    if (err) return console.error(err);
-    task.log()
-});
+// litter.save(function (err, task) {
+//     if (err) return console.error(err);
+//     task.log()
+// });
 
-cleanlitter.save()
-daily.save()
+// cleanlitter.save()
+// daily.save()
 
 Task.find({ name: litter }, function (err, task) {
     if (err) return console.error(err);
