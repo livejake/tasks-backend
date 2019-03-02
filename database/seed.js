@@ -1,6 +1,6 @@
 import { Interval, Task, User, ActivityLog } from "./model"
 import mongoose from 'mongoose'
-mongoose.connect(`mongodb://${process.env.MONGO_SERVER}/test`);
+mongoose.connect(`mongodb://${process.env.DB_SERVER}/test`);
 
 var daily = new Interval({ name: 'daily' });
 
@@ -38,21 +38,24 @@ litter.save(function (err, task) {
     task.log()
 });
 
-arturo.save(() => {
+arturo.save((err, task) => {
     if (err) return console.error(err);
     console.log("arturo saved")
 })
-anna.save(() => {
+anna.save((err, task) => {
     if (err) return console.error(err);
     console.log("anna saved")
 })
-cleanlitter.save(() => {
+cleanlitter.save((err, task) => {
     if (err) return console.error(err);
     console.log("clean litter saved")
 })
 
 console.log("All seeds saved")
 
-// Task.find({ name: litter }, function (err, task) {
-//     if (err) return console.error(err);
-// });
+Task.find({ name: "litter" }, function (err, task) {
+    if (err) return console.error(err);
+    console.log("TASK", task)
+    mongoose.connection.close()
+});
+
