@@ -1,47 +1,11 @@
-import mongoose from 'mongoose';
-import { Interval } from "./Model"
+var mongoose = require('mongoose');
+import { Interval, Task, User, ActivityLog } from "./Model"
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log("we're connected!")
 });
-
-var taskSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    points: Number,
-    interval: { type: mongoose.Schema.Types.ObjectId, ref: 'Interval' }
-
-});
-
-taskSchema.methods.log = function () {
-    var log = `My task is ${this.name} which requires
-    ${this.description}, is worth ${this.points} points and must be completed every
-    ${this.interval}`
-}
-
-
-var userSchema = new mongoose.Schema({
-    name: String,
-    points: Number
-})
-
-var activityLogSchema = new mongoose.Schema({
-    action: String,
-    task: { type: mongoose.Schema.Types.ObjectId, ref: 'Task' },
-    timestamp: Date,
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-})
-
-
-var Task = mongoose.model('Task', taskSchema);
-var User = mongoose.model('User', userSchema);
-var ActivityLog = mongoose.model("ActivityLog", activityLogSchema)
-
-
-
-
 
 var daily = new Interval({ name: 'daily' });
 var litter = new Task({
