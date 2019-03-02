@@ -1,7 +1,6 @@
-import Interval from "./Interval"
-import ActivityLog from "./ActivityLog"
-import Task from "./Task"
-import User from "./User"
+// @create-index
 
-
-export { Interval, ActivityLog, Task, User }
+export { default as ActivityLog } from './ActivityLog';
+export { default as Interval } from './Interval';
+export { default as Task } from './Task';
+export { default as User } from './User';
