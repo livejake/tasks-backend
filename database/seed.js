@@ -1,6 +1,6 @@
 import { Interval, Task, User, ActivityLog } from "./model"
 import mongoose from 'mongoose'
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect(`mongodb://${process.env.MONGO_SERVER}/test`);
 
 var daily = new Interval({ name: 'daily' });
 

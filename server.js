@@ -142,8 +142,8 @@ app.use('/graphql', graphqlHTTP({
   graphiql: true,
 }));
 
-app.listen(4000, '0.0.0.0', function () {
-  console.log('Listening to port:  ' + 3000);
+app.listen(process.env.SERVER_PORT, process.env.SERVER, function () {
+  console.log(`Listening to port:  ${process.env.SERVER_PORT}`);
 });
 
 

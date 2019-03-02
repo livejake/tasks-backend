@@ -4,6 +4,8 @@
   "description": "backend for tasks app",
   "main": "server.js",
   "dependencies": {
+    "babel-register": "^6.26.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
@@ -15,7 +17,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/babel-node server.js"
+    "start": "node -r dotenv/config -r babel-register  server.js",
+    "seed": "node -r dotenv/config -r babel-register  database/seed.js"
   },
   "author": "Jake Bialer and Anna Garcia",
   "license": "ISC"
