@@ -1,31 +1,30 @@
-const express = require('express');
-const graphqlHTTP = require('express-graphql');
-const graphql = require('graphql');
-const mongoose = require('mongoose');
-const db = require("./app")
+import express from 'express';
+import graphqlHTTP from 'express-graphql';
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLSchema } from 'graphql';
+import db from "./app"
 const app = express();
 
-const IntervalType = new graphql.GraphQLObjectType({
+const IntervalType = new GraphQLObjectType({
   name: 'Interval',
   fields: {
-    _id: { type: graphql.GraphQLID },
-    name: { type: graphql.GraphQLString },
+    _id: { type: GraphQLID },
+    name: { type: GraphQLString },
   }
 });
 
-const UserType = new graphql.GraphQLObjectType({
+const UserType = new GraphQLObjectType({
   name: 'User',
   fields: {
-    _id: { type: graphql.GraphQLID },
-    name: { type: graphql.GraphQLString },
-    points: { type: graphql.GraphQLInt }
+    _id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    points: { type: GraphQLInt }
   }
 });
 
-const TaskType = new graphql.GraphQLObjectType({
+const TaskType = new GraphQLObjectType({
   name: 'Task',
   fields: {
-    _id: { type: graphql.GraphQLID },
+    _id: { type: GraphQLID },
     interval: {
       type: IntervalType,
       async resolve(parentValue) {
@@ -36,15 +35,16 @@ const TaskType = new graphql.GraphQLObjectType({
       }
 
     },
-    name: { type: graphql.GraphQLString },
-    points: { type: graphql.GraphQLInt },
+    name: { type: GraphQLString },
+    points: { type: GraphQLInt },
+    description: { type: GraphQLString }
   }
 })
 
-const ActivityLogType = new graphql.GraphQLObjectType({
+const ActivityLogType = new GraphQLObjectType({
   name: "ActivityLog",
   fields: {
-    _id: { type: graphql.GraphQLID },
+    _id: { type: GraphQLID },
     task: {
       type: TaskType,
       async resolve(parentValue) {
@@ -63,16 +63,16 @@ const ActivityLogType = new graphql.GraphQLObjectType({
         })
       }
     },
-    action: { type: graphql.GraphQLString },
-    timestamp: { type: graphql.GraphQLInt }
+    action: { type: GraphQLString },
+    timestamp: { type: GraphQLInt }
   }
 })
 
-const Query = new graphql.GraphQLObjectType({
+const Query = new GraphQLObjectType({
   name: 'QueryType',
   fields: {
     users: {
-      type: new graphql.GraphQLList(UserType),
+      type: new GraphQLList(UserType),
       args: {},
       async resolve(parentValue, args) {
         return db.User.find({}, function (err, users) {
@@ -82,7 +82,7 @@ const Query = new graphql.GraphQLObjectType({
       }
     },
     intervals: {
-      type: new graphql.GraphQLList(IntervalType),
+      type: new GraphQLList(IntervalType),
       args: {},
       async resolve(parentValue, args) {
         return db.Interval.find({}, function (err, intervals) {
@@ -93,7 +93,7 @@ const Query = new graphql.GraphQLObjectType({
     },
     interval: {
       type: IntervalType,
-      args: { id: { type: new graphql.GraphQLNonNull(graphql.GraphQLID) } },
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
       async resolve(parentValue, args) {
         return db.Interval.findById(args.id, function (err, interval) {
           if (err) return console.error(err);
@@ -102,7 +102,7 @@ const Query = new graphql.GraphQLObjectType({
       }
     },
     tasks: {
-      type: new graphql.GraphQLList(TaskType),
+      type: new GraphQLList(TaskType),
       args: {},
       async resolve(parentValue, args) {
         return db.Task.find({}, function (err, tasks) {
@@ -113,7 +113,7 @@ const Query = new graphql.GraphQLObjectType({
     },
     user: {
       type: UserType,
-      args: { id: { type: new graphql.GraphQLNonNull(graphql.GraphQLID) } },
+      args: { id: { type: new GraphQLNonNull(GraphQLID) } },
       async resolve(parentValue, args) {
         return db.User.findById(args.id, function (err, user) {
           if (err) return console.error(err);
@@ -122,7 +122,7 @@ const Query = new graphql.GraphQLObjectType({
       }
     },
     activityLog: {
-      type: new graphql.GraphQLList(ActivityLogType),
+      type: new GraphQLList(ActivityLogType),
       args: {},
       async resolve(parentValue, args) {
         return db.ActivityLog.find({}, function (err, activityLogs) {
@@ -135,7 +135,7 @@ const Query = new graphql.GraphQLObjectType({
   }
 })
 
-let schema = new graphql.GraphQLSchema({ query: Query })
+let schema = new GraphQLSchema({ query: Query })
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
@@ -181,43 +181,3 @@ var root = {
 
   }
 };
-
-// var MyGraphQLSchema = graphql.buildSchema(`
-//   type User {
-//     _id: ID
-//     name: String
-//     points: Int
-//   }
-
-//   type Users {
-//     user: [User]
-//   }
-
-//   type Interval{
-//     _id: ID 
-//     name: String
-//   }
-
-//   type activityLog{
-//     _id: ID 
-//     action: String
-//     task: ID 
-//     timestamp: String
-//     user: ID  
-//   }
-//   type Task {
-//     _id: ID 
-//     name: String
-//     points: Int
-//     interval: ID 
-//   }
-
-//   type Query {
-//     users: [User]
-//     user(id: String): User
-//     intervals: [Interval]
-//     activityLogs: [activityLog]
-//     tasks: [Task]
-//   }
-
-// `);

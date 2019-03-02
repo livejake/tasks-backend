@@ -1,16 +1,11 @@
-var mongoose = require('mongoose');
-
+import mongoose from 'mongoose';
+import { Interval } from "./Model"
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     console.log("we're connected!")
 });
-
-var intervalSchema = new mongoose.Schema({
-    name: String
-})
-
 
 var taskSchema = new mongoose.Schema({
     name: String,
@@ -40,7 +35,6 @@ var activityLogSchema = new mongoose.Schema({
 })
 
 
-var Interval = mongoose.model('Interval', intervalSchema);
 var Task = mongoose.model('Task', taskSchema);
 var User = mongoose.model('User', userSchema);
 var ActivityLog = mongoose.model("ActivityLog", activityLogSchema)
@@ -90,4 +84,4 @@ Task.find({ name: litter }, function (err, task) {
     if (err) return console.error(err);
 });
 
-module.exports = { User,Task,Interval,ActivityLog };
+module.exports = { User, Task, Interval, ActivityLog };
