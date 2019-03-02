@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const taskSchema = new mongoose.Schema({
     name: String,
@@ -14,6 +14,5 @@ taskSchema.methods.log = function () {
     ${this.interval}`
 }
 const Task = mongoose.model('Task', taskSchema);
-
 
 export default Task
