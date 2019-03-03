@@ -138,7 +138,30 @@ const Query = new GraphQLObjectType({
   }
 })
 
-let schema = new GraphQLSchema({ query: Query })
+const UserInput = new GraphQLObjectType({
+  name: 'UserInput',
+  fields: {
+    name: { type: GraphQLString },
+  }
+});
+
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    createUser: {
+      type: UserInput,
+      args: { name: { type: new GraphQLNonNull(GraphQLString) } },
+      async resolve(parentValue, args) {
+        return User.create({ name: args.name, points: 0 }, function (err, users) {
+          if (err) return console.error(err);
+          return users
+        })
+      }
+    },
+  }
+})
+
+let schema = new GraphQLSchema({ query: Query, mutation: Mutation })
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
