@@ -12,7 +12,8 @@ const createTask = {
         interval: { type: GraphQLString }
     },
     async resolve(parentValue, args) {
-        const id = await Interval.findOne({ name: args.interval || "daily" }, { "_id": 1 }, function (err, id) {
+        const id = await Interval.findOne({ name: args.interval || "daily" }, { "_id": 1 }, 
+        function (err, id) {
             if (err) return console.error(err);
             return id
         })
